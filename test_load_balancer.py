@@ -8,11 +8,12 @@ class TestLoad_balancer(TestCase):
     @classmethod
     def setUpClass(self) -> None:
         self.balancer = Load_balancer()
-        self.arr, self.idxs = self.prep_buffer(buf_len_magnitude=100000, avg=10000)
+        # self.arr, self.idxs = self.prep_buffer(buf_len_magnitude=100000, avg=10000)
+        self.arr, self.idxs = self.prep_buffer(buf_len_magnitude=100, avg=10)
         self.idxs = tuple(self.idxs)
 
         # -------------------------------------------------------------------------------------
-    def prep_buffer(buf_len_magnitude, avg=5, divs=3):
+    def prep_buffer(buf_len_magnitude: int, avg: int = 5, divs: int = 3) -> tuple:
         '''
         Fill the buffer in a way that for sure can be partitioned into divs partitions.
         Each cell contains on average avg units.
@@ -70,8 +71,8 @@ class TestLoad_balancer(TestCase):
 
     def test_stupid(self):
         t1t2 = self.balancer.stupid(self.arr)
-        self.assertTupleEqual(tuple1=t1t2, tuple2=self.idxs, msg="Indexes not match")
+        self.assertTupleEqual(tuple1=t1t2, tuple2=self.idxs, msg="Indexes found for partition do not match indexes used for partition during buffer preparation")
 
     def test_smart(self):
         t1t2 = self.balancer.smart(self.arr)
-        self.assertTupleEqual(tuple1=t1t2, tuple2=self.idxs, msg="Indexes not match")
+        self.assertTupleEqual(tuple1=t1t2, tuple2=self.idxs, msg="Indexes found for partition do not match indexes used for partition during buffer preparation")
